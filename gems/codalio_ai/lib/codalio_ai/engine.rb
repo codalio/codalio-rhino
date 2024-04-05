@@ -9,6 +9,8 @@ module CodalioAi
         Rhino.registered_modules[:codalio_ai] = {
           version: CodalioAi::VERSION::STRING
         }
+
+        Rhino.resources += ["CodalioAi::DevAi"] if Rails.env.development?
       end
     end
   end

@@ -13,6 +13,7 @@ export default mergeConfig(
   config,
   tanstackBuildConfig({
     entry: ['./src/index.ts'],
-    srcDir: './src'
+    srcDir: './src',
+    externalDeps: ['react']
   })
 );
