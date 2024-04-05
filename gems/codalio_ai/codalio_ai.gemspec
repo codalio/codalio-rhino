@@ -15,6 +15,6 @@ Gem::Specification.new do |spec|
   spec.files = Dir['{app,config,db,lib}/**/*', 'Rakefile', 'README.md', 'LICENSE']
 
   spec.add_dependency "rails", "~> 7.0.0", ">= 7.0.0"
-  spec.add_dependency "rhino_project_core"
+  spec.add_dependency "rhino_project_core", "~> 0.20.0.beta.48"
   spec.add_dependency "rake", "~> 13.1"
 end

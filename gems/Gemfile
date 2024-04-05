@@ -6,3 +6,8 @@ eval_gemfile('../Gemfile')
 
 # AI
 gem "rhino_project_core", "~> 0.20.0.beta.48"
+gem "devise", "~> 4.9.3"
+gem "devise_token_auth"
+gem "pundit", "~> 2.1.0"
+gem "arel-helpers", "~> 2.14.0"
+gem "rgl", "~> 0.5.7"
