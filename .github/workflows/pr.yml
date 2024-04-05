@@ -1,0 +1,77 @@
+name: pr
+
+on:
+  pull_request:
+    paths-ignore:
+      - '**/*.md'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
+  NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
+  FRONT_END_URL: http://localhost:3001
+  ROOT_URL: http://localhost:3000
+  DB_NAME: codalio
+  DB_USERNAME: codalio
+  DB_PASSWORD: codalio
+  STRIPE_SECRET_KEY: 'FOR_TESTS'
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres
+        # Provide the password for postgres
+        env:
+          POSTGRES_USER: codalio
+          POSTGRES_DB: codalio
+          POSTGRES_PASSWORD: codalio
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          # Maps tcp port 5432 on service container to the host
+          - 5432:5432
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          working-directory: 'gems'
+          bundler-cache: true
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --prefer-offline
+      - name: Get base and head commits for `nx affected`
+        uses: nrwl/nx-set-shas@v3
+        with:
+          main-branch-name: 'main'
+      - name: Run Checks
+        run: pnpm run test:pr
+      - name: Run Rubocop
+        run: bundle exec rubocop
+        working-directory: 'gems'
+      - name: Run Gem Checks
+        run: bundle exec rake test
+        working-directory: 'gems'

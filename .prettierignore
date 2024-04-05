@@ -1,0 +1,12 @@
+**/.next
+**/.nx/cache
+**/build
+**/coverage
+**/dist
+**/codemods/**/__testfixtures__
+pnpm-lock.yaml
+gems/**
+*.rubocop*
+
+// Ignore temporary vite files when building in parallel with nx
+vite.config.ts.timestamp-*.mjs

@@ -1,0 +1,8 @@
+# Gemfile
+source 'https://rubygems.org'
+gemspec
+
+eval_gemfile('../Gemfile')
+
+# AI
+gem "rhino_project_core", "~> 0.20.0.beta.48"
