@@ -31,7 +31,7 @@ jobs:
         # Provide the password for postgres
         env:
           POSTGRES_USER: codalio
-          POSTGRES_DB: codalio
+          POSTGRES_DB: codalio_test
           POSTGRES_PASSWORD: codalio
         # Set health checks to wait until postgres has started
         options: >-
