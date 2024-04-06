@@ -8,9 +8,9 @@ module Codalio
 
   module VERSION
     MAJOR = 0
-    MINOR = 1
-    TINY  = 0
-    PRE   = "beta.1"
+    MINOR = 0
+    TINY  = 2
+    PRE   = "beta.2"
 
     STRING = [MAJOR, MINOR, TINY, PRE].compact.join(".")
   end
