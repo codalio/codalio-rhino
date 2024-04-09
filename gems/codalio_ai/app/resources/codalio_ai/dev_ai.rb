@@ -67,7 +67,11 @@ module CodalioAi
       tool_data = params.permit(:content, contexts: {}).to_h.merge({ model_list:, rhino_config: })
       response = client.post("#{dev_ai_endpoint}/api/tool/ai", tool_data)
 
-      rhino_config_set(content: response.body["rhino_config_js"]) if response.success? && response.body["rhino_config_js"].present?
+      response.body.each do |k, v|
+        debugger
+        send(k, **JSON.parse(v).symbolize_keys) if respond_to?(k)
+      end
+      # rhino_config_set(content: response.body["rhino_config_set"]) if response.success? && response.body["rhino_config_set"].present?
 
       response.body
     end
