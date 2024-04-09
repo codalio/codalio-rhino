@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import CodalioLogo from './CodalioImage.png';
 import styles from './CodalioDevTool.module.css';
 import { useLocalStorage } from 'react-use';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Button, Input } from 'reactstrap';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -48,14 +48,37 @@ const useDevAiEnabled = (): boolean => {
   return data?.enabled || false;
 };
 
+export const RHINO_DEV_BROADCAST_CHANNEL = 'rhino_dev_channel';
+
 const CodalioDevToolAI = () => {
   const [content, setContent] = useState('');
   const { mutate, isLoading } = useDevAi();
   const aiEnabled = useDevAiEnabled();
+  const [contexts, setContexts] = useState({});
+
+  useEffect(() => {
+    const bc = new BroadcastChannel(RHINO_DEV_BROADCAST_CHANNEL);
+
+    bc.onmessage = ({ data }) => {
+      const { id, action } = data;
+
+      setContexts((current) => {
+        if (action === 'remove') return omit(current, [id]);
+
+        return {
+          ...current,
+          [id]: data
+        };
+      });
+    };
+
+    // Close on unmount
+    return () => bc.close();
+  }, []);
 
   const handleClick = useCallback(() => {
-    mutate({ content });
-  }, [mutate, content]);
+    mutate({ content, contexts });
+  }, [mutate, content, contexts]);
 
   if (!aiEnabled) {
     return <div>AI is disabled</div>;

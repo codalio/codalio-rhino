@@ -64,7 +64,7 @@ module CodalioAi
     end
 
     def self.create(params)
-      tool_data = params.permit(:content).to_h.merge({ model_list:, rhino_config: })
+      tool_data = params.permit(:content, contexts: {}).to_h.merge({ model_list:, rhino_config: })
       response = client.post("#{dev_ai_endpoint}/api/tool/ai", tool_data)
 
       rhino_config_set(content: response.body["rhino_config_js"]) if response.success? && response.body["rhino_config_js"].present?
