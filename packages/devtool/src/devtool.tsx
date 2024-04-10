@@ -4,11 +4,13 @@ import { omit } from 'lodash-es';
 import CodalioLogo from './CodalioImage.png';
 import styles from './CodalioDevTool.module.css';
 import { useLocalStorage } from 'react-use';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Button, Input } from 'reactstrap';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { networkApiCallOnlyData } from '@rhino-project/core/lib';
+import { createConsumer } from '@rails/actioncable';
+import env from '@rhino-project/config/env';
 
 const queryClient = new QueryClient({});
 
@@ -56,6 +58,24 @@ const CodalioDevToolAI = () => {
   const { mutate, isLoading } = useDevAi();
   const aiEnabled = useDevAiEnabled();
   const [contexts, setContexts] = useState({});
+
+  console.log(env);
+  const consumer = useMemo(
+    () => createConsumer(`${env.CODALIO_ENDPOINT}/cable`),
+    []
+  );
+
+  useEffect(() => {
+    consumer.subscriptions.create(
+      { channel: 'AiChannel', api_key: env.CODALIO_API_KEY },
+      {
+        connected() {},
+        received(data) {
+          console.log(data);
+        }
+      }
+    );
+  }, [consumer]);
 
   useEffect(() => {
     const bc = new BroadcastChannel(RHINO_DEV_BROADCAST_CHANNEL);
