@@ -61,13 +61,16 @@ const CodalioDevToolAI = () => {
 
   console.log(env);
   const consumer = useMemo(
-    () => createConsumer(`${env.CODALIO_ENDPOINT}/cable`),
+    () =>
+      createConsumer(
+        `${env.CODALIO_ENDPOINT}/cable?api_key=${env.CODALIO_API_KEY}`
+      ),
     []
   );
 
   useEffect(() => {
     consumer.subscriptions.create(
-      { channel: 'AiChannel', api_key: env.CODALIO_API_KEY },
+      { channel: 'AiChannel' },
       {
         connected() {},
         received(data) {
