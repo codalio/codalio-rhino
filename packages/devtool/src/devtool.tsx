@@ -67,17 +67,19 @@ const CodalioDevToolAI = () => {
     []
   );
 
-  useEffect(() => {
-    consumer.subscriptions.create(
-      { channel: 'AiChannel' },
-      {
-        connected() {},
-        received(data) {
-          console.log(data);
+  const subscription = useMemo(
+    () =>
+      consumer.subscriptions.create(
+        { channel: 'AiChannel' },
+        {
+          connected() {},
+          received(data) {
+            console.log(data);
+          }
         }
-      }
-    );
-  }, [consumer]);
+      ),
+    [consumer]
+  );
 
   useEffect(() => {
     const bc = new BroadcastChannel(RHINO_DEV_BROADCAST_CHANNEL);
@@ -100,7 +102,9 @@ const CodalioDevToolAI = () => {
   }, []);
 
   const handleClick = useCallback(() => {
-    mutate({ content, contexts });
+    console.log({ content, contexts });
+    subscription.send({ content, contexts });
+    // mutate({ content, contexts });
   }, [mutate, content, contexts]);
 
   if (!aiEnabled) {
