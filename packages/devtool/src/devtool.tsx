@@ -59,7 +59,6 @@ const CodalioDevToolAI = () => {
   const aiEnabled = useDevAiEnabled();
   const [contexts, setContexts] = useState({});
 
-  console.log(env);
   const consumer = useMemo(
     () =>
       createConsumer(
