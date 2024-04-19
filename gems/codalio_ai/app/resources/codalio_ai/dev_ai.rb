@@ -38,6 +38,10 @@ module CodalioAi
       File.read(rhino_config_path)
     end
 
+    def self.rhino_config_get
+      rhino_config
+    end
+
     def self.rhino_config_set(content:)
       puts content
       File.write(rhino_config_path, content)
@@ -63,16 +67,31 @@ module CodalioAi
       { enabled: ENV["CODALIO_API_KEY"].present? }
     end
 
+    # def self.create(params)
+    #   tool_data = params.permit(:content, contexts: {}).to_h.merge({ model_list:, rhino_config: })
+    #   response = client.post("#{dev_ai_endpoint}/api/tool/ai", tool_data)
+
+    #   response.body.each do |k, v|
+    #     send(k, **JSON.parse(v).symbolize_keys) if respond_to?(k)
+    #   end
+    #   # rhino_config_set(content: response.body["rhino_config_set"]) if response.success? && response.body["rhino_config_set"].present?
+
+    #   response.body
+    # end
+
     def self.create(params)
-      tool_data = params.permit(:content, contexts: {}).to_h.merge({ model_list:, rhino_config: })
-      response = client.post("#{dev_ai_endpoint}/api/tool/ai", tool_data)
+      debugger
+      ai_info = params.require(:simple).permit!.to_h
+      tool_calls = ai_info[:tool_calls]
+      # response = client.post("#{dev_ai_endpoint}/api/tool/ai", tool_data)
 
-      response.body.each do |k, v|
-        send(k, **JSON.parse(v).symbolize_keys) if respond_to?(k)
+      tool_calls.each do |k, v|
+        tool_calls[k] = send(k, **JSON.parse(v).symbolize_keys) if respond_to?(k)
       end
-      # rhino_config_set(content: response.body["rhino_config_set"]) if response.success? && response.body["rhino_config_set"].present?
+      # # rhino_config_set(content: response.body["rhino_config_set"]) if response.success? && response.body["rhino_config_set"].present?
 
-      response.body
+      # response.body
+      ai_info
     end
 
     def self.model_name

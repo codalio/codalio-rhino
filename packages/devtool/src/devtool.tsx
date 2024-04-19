@@ -75,6 +75,11 @@ const CodalioDevToolAI = () => {
           connected() {},
           received(data) {
             console.log(data);
+            mutate(data, {
+              onSuccess: (data) => {
+                console.log('Received back', data);
+              }
+            });
           }
         }
       ),
@@ -104,7 +109,6 @@ const CodalioDevToolAI = () => {
   const handleClick = useCallback(() => {
     console.log({ content, contexts });
     subscription.send({ content, contexts });
-    // mutate({ content, contexts });
   }, [mutate, content, contexts]);
 
   if (!aiEnabled) {
