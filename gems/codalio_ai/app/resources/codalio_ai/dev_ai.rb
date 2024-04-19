@@ -46,7 +46,7 @@ module CodalioAi
       puts content
       File.write(rhino_config_path, content)
 
-      { response: "Updated rhino.config.js to #{content}" }
+      "Updated rhino.config.js to #{content}"
     end
 
     def self.dev_ai_endpoint
@@ -95,6 +95,7 @@ module CodalioAi
           content: send(name, **JSON.parse(tool[:function][:arguments]).symbolize_keys)
         }
       end.compact
+
       # # rhino_config_set(content: response.body["rhino_config_set"]) if response.success? && response.body["rhino_config_set"].present?
 
       # response.body
