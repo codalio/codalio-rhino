@@ -90,7 +90,7 @@ const CodalioDevToolAI = () => {
             mutate(data, {
               onSuccess: (data) => {
                 console.log('Success2', data);
-                this.send(data);
+                if (data?.tool_calls?.length > 0) this.send(data);
               }
             });
           }
