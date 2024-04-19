@@ -80,14 +80,21 @@ module CodalioAi
     # end
 
     def self.create(params)
-      debugger
       ai_info = params.require(:simple).permit!.to_h
       tool_calls = ai_info[:tool_calls]
       # response = client.post("#{dev_ai_endpoint}/api/tool/ai", tool_data)
 
-      tool_calls.each do |k, v|
-        tool_calls[k] = send(k, **JSON.parse(v).symbolize_keys) if respond_to?(k)
-      end
+      ai_info[:tool_calls] = tool_calls.map do |tool|
+        name = tool.dig(:function, :name)
+        next unless respond_to?(name)
+
+        {
+          tool_call_id: tool[:id],
+          role: "tool",
+          name:,
+          content: send(name, **JSON.parse(tool[:function][:arguments]).symbolize_keys)
+        }
+      end.compact
       # # rhino_config_set(content: response.body["rhino_config_set"]) if response.success? && response.body["rhino_config_set"].present?
 
       # response.body

@@ -53,6 +53,18 @@ const useDevAiEnabled = (): boolean => {
 
 export const RHINO_DEV_BROADCAST_CHANNEL = 'rhino_dev_channel';
 
+export const useCable = () => {
+  const consumer = useMemo(
+    () =>
+      createConsumer(
+        `${env.CODALIO_ENDPOINT}/cable?api_key=${env.CODALIO_API_KEY}`
+      ),
+    []
+  );
+
+  return consumer;
+};
+
 const CodalioDevToolAI = () => {
   const [content, setContent] = useState('');
   const { mutate, isLoading } = useDevAi();
@@ -77,7 +89,8 @@ const CodalioDevToolAI = () => {
             console.log(data);
             mutate(data, {
               onSuccess: (data) => {
-                console.log('Received back', data);
+                console.log('Success2', data);
+                this.send(data);
               }
             });
           }
