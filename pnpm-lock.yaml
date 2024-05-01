@@ -145,15 +145,24 @@ importers:
 
   packages/devtool:
     dependencies:
+      '@rails/actioncable':
+        specifier: 7.0.8
+        version: 7.0.8
+      '@rhino-project/config':
+        specifier: ^0.19.2
+        version: 0.19.2(react-dom@18.2.0)(react@18.2.0)
       '@rhino-project/core':
-        specifier: 0.20.0-beta.4
-        version: 0.20.0-beta.4(@popperjs/core@2.11.8)(@types/react@18.2.48)(react-dom@18.2.0)(react@18.2.0)
+        specifier: 0.20.0-beta.49
+        version: 0.20.0-beta.49(@popperjs/core@2.11.8)(@types/react@18.2.48)(react-dom@18.2.0)(react@18.2.0)
       '@tanstack/react-query':
         specifier: 4.32.6
         version: 4.32.6(react-dom@18.2.0)(react@18.2.0)
       classnames:
         specifier: 2.3.1
         version: 2.3.1
+      lodash-es:
+        specifier: ^4.17.21
+        version: 4.17.21
       react-use:
         specifier: 17.4.2
         version: 17.4.2(react-dom@18.2.0)(react@18.2.0)
@@ -161,6 +170,9 @@ importers:
         specifier: ^9.1.9
         version: 9.2.2(react-dom@18.2.0)(react@18.2.0)
     devDependencies:
+      '@types/actioncable':
+        specifier: ^5.2.11
+        version: 5.2.11
       '@vitejs/plugin-react':
         specifier: ^4.2.1
         version: 4.2.1(vite@5.1.3)
@@ -1273,6 +1285,10 @@ packages:
     resolution: {integrity: sha512-Iefl21FZD+ck1di6xSHMYzSzRiNJTHV4NrAzCfDfqc/wPz4xncrP8f2/fJ+2jzwKIaDn76UVMsALh7R5OzsF8Q==}
     dev: false
 
+  /@rails/actioncable@7.0.8:
+    resolution: {integrity: sha512-GjYQv89ZOOfbFw8VMNUOG33GXzyAA/TCVoD+742Ob4svm1XXUkd+w+ewqUXd+7VHQtV35y1/O78AGIPeJDTy/g==}
+    dev: false
+
   /@rails/activestorage@7.0.3:
     resolution: {integrity: sha512-pdIoQUNcimjbSlhUgnRyFimVvsp/J9C1yTxV3P40oQrRU81f3uM9tT4IY/wMfe691Zj7tJBiqsbThUoPT88TAA==}
     dependencies:
@@ -1293,8 +1309,8 @@ packages:
       react: 18.2.0
     dev: false
 
-  /@rhino-project/config@0.20.0-beta.4(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-w1LPWJgywaHK7QEhvGzW+U+9xxavr2IxEcDJpp5Hti8s+4uKZ2vprEWGZXQFl2zmy32OFurgKtNRdB+dOFvrbQ==}
+  /@rhino-project/config@0.19.2(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-ErvyvajEu9lg2GDb5sOSVO8fGItF0obI5BJLOdnt+C6+UCRP+cFm5ZFnZXid9vxcsO99WbVFh5eaPwZHhTxBIw==}
     engines: {node: '>=18'}
     peerDependencies:
       react: '>=16'
@@ -1305,18 +1321,30 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
-  /@rhino-project/core@0.20.0-beta.4(@popperjs/core@2.11.8)(@types/react@18.2.48)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-shoRSsW2z0wIiE3Z68oMwNweyhHaTvrnxu+FuzpP3Jw9GWe//KdSoyHK82jtKGRvDQtLk8LSJyyZ3ZPkmigavQ==}
+  /@rhino-project/config@0.20.0-beta.49(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-2/etNGppNfHHBFUzDjAplp0aG0WpDxTG/x3ZhVaZck5qKhh6pwyHRRwuyDtAn9i2wWdQS3laPtG2c8D5eG1UWw==}
     engines: {node: '>=18'}
     peerDependencies:
       react: '>=16'
       react-dom: '>=16'
     dependencies:
+      lodash-es: 4.17.21
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
+  /@rhino-project/core@0.20.0-beta.49(@popperjs/core@2.11.8)(@types/react@18.2.48)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-RutXfsuyDtwl1Bm5LvLY+Q/WOaV85F1A77QykZE0L+rglMucpT+9Z8Gv99IgE0wjv/o+pa+uxTKrf4Ns+hXBhQ==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      react: ^18.2.0
+      react-dom: ^18.2.0
+    dependencies:
       '@hookform/devtools': 4.3.1(@types/react@18.2.48)(react-dom@18.2.0)(react@18.2.0)
       '@hookform/resolvers': 3.3.2(react-hook-form@7.49.2)
       '@rails/actioncable': 7.0.3
       '@rails/activestorage': 7.0.3
-      '@rhino-project/config': 0.20.0-beta.4(react-dom@18.2.0)(react@18.2.0)
+      '@rhino-project/config': 0.20.0-beta.49(react-dom@18.2.0)(react@18.2.0)
       '@rollbar/react': 0.11.2(prop-types@15.7.2)(react@18.2.0)(rollbar@2.26.2)
       '@stripe/react-stripe-js': 2.1.0(@stripe/stripe-js@1.52.0)(react-dom@18.2.0)(react@18.2.0)
       '@stripe/stripe-js': 1.52.0
@@ -1328,17 +1356,15 @@ packages:
       bootstrap-icons: 1.11.3
       classnames: 2.3.1
       date-fns: 2.28.0
-      lodash: 4.17.21
+      lodash-es: 4.17.21
       prop-types: 15.7.2
       qs: 6.9.7
       react: 18.2.0
       react-bootstrap-typeahead: 6.3.2(react-dom@18.2.0)(react@18.2.0)
       react-datepicker: 4.8.0(react-dom@18.2.0)(react@18.2.0)
       react-dom: 18.2.0(react@18.2.0)
-      react-helmet: 6.1.0(react@18.2.0)
       react-hook-form: 7.49.2(react@18.2.0)
       react-phone-input-2: 2.15.1(react-dom@18.2.0)(react@18.2.0)
-      react-router: 6.16.0(react@18.2.0)
       react-router-dom: 6.16.0(react-dom@18.2.0)(react@18.2.0)
       react-use: 17.4.2(react-dom@18.2.0)(react@18.2.0)
       reactstrap: 9.2.2(react-dom@18.2.0)(react@18.2.0)
@@ -1732,6 +1758,10 @@ packages:
     resolution: {integrity: sha512-hJ55YfJlWbfzRROfcyA/kC1aZr/shsLA8XNAwN8jXylhYWGLnPmiJJISrUfj4dMMWRiFi0xBlnlC7MLH+zSrcw==}
     engines: {node: '>=12'}
     dev: false
+
+  /@types/actioncable@5.2.11:
+    resolution: {integrity: sha512-aGzv5JS3razLvv4ZJW+wlDuNS5y1IFFVlm1EkZq3ZHs6txju7/2iee1e6sdK6DE4zsz8cIREs1K4BtfF5RMESQ==}
+    dev: true
 
   /@types/argparse@1.0.38:
     resolution: {integrity: sha512-ebDJ9b0e702Yr7pWgB0jzm+CX4Srzz8RcXtLJDJB+BSccqMa36uyH/zUsSYao5+BD1ytv3k3rPYCq4mAE1hsXA==}
@@ -5572,18 +5602,6 @@ packages:
     resolution: {integrity: sha512-nsO+KSNgo1SbJqJEYRE9ERzo7YtYbou/OqjSQKxV7jcKox7+usiUVZOAC+XnDOABXggQTno0Y1CpVnuWEc1boQ==}
     dev: false
 
-  /react-helmet@6.1.0(react@18.2.0):
-    resolution: {integrity: sha512-4uMzEY9nlDlgxr61NL3XbKRy1hEkXmKNXhjbAIOVw5vcFrsdYbH2FEwcNyWvWinl103nXgzYNlns9ca+8kFiWw==}
-    peerDependencies:
-      react: '>=16.3.0'
-    dependencies:
-      object-assign: 4.1.1
-      prop-types: 15.8.1
-      react: 18.2.0
-      react-fast-compare: 3.2.2
-      react-side-effect: 2.1.2(react@18.2.0)
-    dev: false
-
   /react-hook-form@7.49.2(react@18.2.0):
     resolution: {integrity: sha512-TZcnSc17+LPPVpMRIDNVITY6w20deMdNi6iehTFLV1x8SqThXGwu93HjlUVU09pzFgZH7qZOvLMM7UYf2ShAHA==}
     engines: {node: '>=18', pnpm: '8'}
@@ -5687,14 +5705,6 @@ packages:
       react: '>=16.8'
     dependencies:
       '@remix-run/router': 1.9.0
-      react: 18.2.0
-    dev: false
-
-  /react-side-effect@2.1.2(react@18.2.0):
-    resolution: {integrity: sha512-PVjOcvVOyIILrYoyGEpDN3vmYNLdy1CajSFNt4TDsVQC5KpTijDvWVoR+/7Rz2xT978D8/ZtFceXxzsPwZEDvw==}
-    peerDependencies:
-      react: ^16.3.0 || ^17.0.0 || ^18.0.0
-    dependencies:
       react: 18.2.0
     dev: false
 

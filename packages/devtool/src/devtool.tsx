@@ -1,13 +1,16 @@
 import classnames from 'classnames';
+import { omit } from 'lodash-es';
 
 import CodalioLogo from './CodalioImage.png';
 import styles from './CodalioDevTool.module.css';
 import { useLocalStorage } from 'react-use';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Button, Input } from 'reactstrap';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { networkApiCallOnlyData } from '@rhino-project/core/lib';
+import { createConsumer } from '@rails/actioncable';
+import env from '@rhino-project/config/env';
 
 const queryClient = new QueryClient({});
 
@@ -48,14 +51,78 @@ const useDevAiEnabled = (): boolean => {
   return data?.enabled || false;
 };
 
+export const RHINO_DEV_BROADCAST_CHANNEL = 'rhino_dev_channel';
+
+export const useCable = () => {
+  const consumer = useMemo(
+    () =>
+      createConsumer(
+        `${env.CODALIO_ENDPOINT}/cable?api_key=${env.CODALIO_API_KEY}`
+      ),
+    []
+  );
+
+  return consumer;
+};
+
 const CodalioDevToolAI = () => {
   const [content, setContent] = useState('');
   const { mutate, isLoading } = useDevAi();
   const aiEnabled = useDevAiEnabled();
+  const [contexts, setContexts] = useState({});
+
+  const consumer = useMemo(
+    () =>
+      createConsumer(
+        `${env.CODALIO_ENDPOINT}/cable?api_key=${env.CODALIO_API_KEY}`
+      ),
+    []
+  );
+
+  const subscription = useMemo(
+    () =>
+      consumer.subscriptions.create(
+        { channel: 'AiChannel' },
+        {
+          connected() {},
+          received(data) {
+            console.log(data);
+            mutate(data, {
+              onSuccess: (data) => {
+                console.log('Success2', data);
+                if (data?.tool_calls?.length > 0) this.send(data);
+              }
+            });
+          }
+        }
+      ),
+    [consumer]
+  );
+
+  useEffect(() => {
+    const bc = new BroadcastChannel(RHINO_DEV_BROADCAST_CHANNEL);
+
+    bc.onmessage = ({ data }) => {
+      const { id, action } = data;
+
+      setContexts((current) => {
+        if (action === 'remove') return omit(current, [id]);
+
+        return {
+          ...current,
+          [id]: data
+        };
+      });
+    };
+
+    // Close on unmount
+    return () => bc.close();
+  }, []);
 
   const handleClick = useCallback(() => {
-    mutate({ content });
-  }, [mutate, content]);
+    console.log({ content, contexts });
+    subscription.send({ content, contexts });
+  }, [mutate, content, contexts]);
 
   if (!aiEnabled) {
     return <div>AI is disabled</div>;
